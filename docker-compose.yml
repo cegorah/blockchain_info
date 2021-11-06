@@ -1,0 +1,42 @@
+version: '3'
+volumes:
+  database_volume:
+
+services:
+  bc_app:
+    build: .
+    expose:
+      - "8080"
+    env_file:
+      - .env
+  nginx:
+    container_name: bc_nginx
+    build: containers/services/nginx
+    ports:
+      - "80:80"
+    restart: always
+    links:
+      - bc_app
+    depends_on:
+      - bc_app
+  bc_db:
+    image: postgres:alpine
+    container_name: bc_db
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    restart: always
+    links:
+      - bc_app
+    volumes:
+      - database_volume:/var/lib/postgresql/data
+  redis:
+    image: bitnami/redis:latest
+    container_name: redis
+    links:
+      - bc_app
+    env_file:
+      - .env
+    ports:
+      - "6379:6379"

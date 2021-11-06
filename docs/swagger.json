@@ -1,0 +1,184 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "blockchain_info"
+  },
+  "host": "localhost:8080",
+  "basePath": "/v1",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/tx/{net_code}/{hash}": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "blockchain_info"
+        ],
+        "operationId": "getTxInfo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "net_code",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "enum": [
+              "BTC",
+              "LTC",
+              "DOGE"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns an information about a transaction",
+            "schema": {
+              "$ref": "#/definitions/Transactions"
+            }
+          },
+          "400": {
+            "description": "Wrong request parameters"
+          },
+          "404": {
+            "description": "Transaction not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/block/{net_code}/{hash}": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "tags": [
+          "blockchain_info"
+        ],
+        "operationId": "getBlock",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "net_code",
+            "type": "string",
+            "in": "path",
+            "required": true,
+            "enum": [
+              "BTC",
+              "LTC",
+              "DOGE"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns an information about a block with a hash",
+            "schema": {
+              "$ref": "#/definitions/BlockInfo"
+            }
+          },
+          "400": {
+            "description": "Wrong request parameters"
+          },
+          "404": {
+            "description": "Block not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "TransactionInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date"
+        },
+        "fee": {
+          "type": "number"
+        },
+        "sent_value": {
+          "type": "integer"
+        }
+      }
+    },
+    "Transactions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/TransactionInfo"
+      }
+    },
+    "BlockInfo": {
+      "type": "object",
+      "properties": {
+        "net_code": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "default": null
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date"
+        },
+        "prev_hash": {
+          "type": "string"
+        },
+        "next_hash": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "default": null
+        },
+        "first_ten_transactions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TransactionInfo"
+          },
+          "maxLength": 10
+        }
+      }
+    }
+  }
+}

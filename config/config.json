@@ -1,0 +1,11 @@
+{
+  "services": {
+    "init_timeout": 5,
+    "query_timeout": 5,
+    "redis": {
+      "connection_string": "localhost:6379",
+      "db": 0,
+      "ttl": 5
+    }
+  }
+}
