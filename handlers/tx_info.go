@@ -30,7 +30,6 @@ func (txi *TxInfoImpl) Handle(params blockchain_info.GetTxInfoParams, i interfac
 	dt, err := txi.Cache.GetCache(cacheKey)
 	if err != nil {
 		lg.Printf("%s", err)
-		return blockchain_info.NewGetTxInfoInternalServerError()
 	} else if dt != nil {
 		var txs models.Transactions
 		if err := json.Unmarshal(dt, &txs); err != nil {
@@ -64,7 +63,6 @@ func (txi *TxInfoImpl) Handle(params blockchain_info.GetTxInfoParams, i interfac
 	e = txi.Cache.SetCache(cacheKey, cachedData)
 	if e != nil {
 		lg.Printf("%s", err)
-		return blockchain_info.NewGetTxInfoInternalServerError()
 	}
 	res.Payload = resPayload
 	return res

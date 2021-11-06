@@ -30,7 +30,6 @@ func (bInfo *BlockInfoImpl) Handle(params blockchain_info.GetBlockParams, i inte
 	dt, err := bInfo.Cache.GetCache(cacheKey)
 	if err != nil {
 		lg.Printf("%s", err)
-		return blockchain_info.NewGetBlockInternalServerError()
 	} else if dt != nil {
 		blInfo := models.BlockInfo{}
 		if err := json.Unmarshal(dt, &blInfo); err != nil {
@@ -60,7 +59,6 @@ func (bInfo *BlockInfoImpl) Handle(params blockchain_info.GetBlockParams, i inte
 	e = bInfo.Cache.SetCache(cacheKey, cachedData)
 	if e != nil {
 		lg.Printf("%s", err)
-		return blockchain_info.NewGetBlockInternalServerError()
 	}
 	res.Payload = bd
 	return res
